@@ -84,13 +84,13 @@ export default function App() {
             <Title title="ToDo" />  
             {todos.map( item => {
               return (
-                <TodoItem key={item.key} item={item} pressHandler={pressHandlerTodos}/>
+                <TodoItem key={item.key} item={item} pressHandler={pressHandlerTodos} is_done={false}/>
               );
             })}
             <Title title="Done" />
             {dones.map( item => {
               return (
-                <TodoItem key={item.key} item={item} pressHandler={pressHandlerDones}/>
+                <TodoItem key={item.key} item={item} pressHandler={pressHandlerDones} is_done={true}/>
               );
             })}
           </ScrollView>

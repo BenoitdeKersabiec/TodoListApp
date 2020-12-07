@@ -15,7 +15,7 @@ import Title from './components/title';
 import Footer from './components/footer';
 import TodoItem from './components/todoItem';
 import AddTodo from './components/addTodo';
-import AddButton from './components/addButton'
+// import AddButton from './components/addButton'
 
 export default function App() {
   const [todos, setTodos] = useState([
@@ -95,7 +95,7 @@ export default function App() {
             })}
           </ScrollView>
         </View>
-        <SB style="dark"/> 
+        <SB style="auto"/> 
         <AddTodo submitHandler={submitHandler}/>
         <Footer/>
       </View>

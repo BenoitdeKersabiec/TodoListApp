@@ -7,7 +7,7 @@ export default function Title({ title }) {
             <Text style={styles.title}>{title}</Text>
         </View>
     )
-};
+}
 
 const styles = StyleSheet.create({
     header: {

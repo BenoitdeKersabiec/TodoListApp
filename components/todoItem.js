@@ -7,7 +7,7 @@ export default function TodoItem({ item, pressHandler }) {
             <Text style={styles.item}>{item.text}</Text>
         </TouchableOpacity>
     );
-};
+}
 
 const styles = StyleSheet.create({
     item: {

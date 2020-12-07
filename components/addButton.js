@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
-import { StyleSheet, Text, TextInput, Button, View } from 'react-native';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 
 export default function AddButton() {
     return (
-        <View style={{backgroundColor: 'coral'}} />
+        <View style={styles.circle} />
         //     <Text>Salut</Text>
         // </View>
     )

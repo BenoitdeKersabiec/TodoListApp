@@ -9,7 +9,6 @@ import {
   Platform,
   StatusBar,
   ScrollView,
-  Text
 } from 'react-native';
 
 import Footer from './footer';

@@ -17,6 +17,11 @@ export default function AddMenu ({showAddMenu, hideAddMenu}) {
         setText(value);
     }
 
+    const handleSubmit = () => {
+        hideAddMenu(text, true); 
+        setText('');
+    }
+
     return (
         <Modal transparent={true} visible={showAddMenu} animationType='fade'>
             <TouchableWithoutFeedback onPress={() => hideAddMenu(text, false)}>
@@ -30,7 +35,7 @@ export default function AddMenu ({showAddMenu, hideAddMenu}) {
                                 defaultValue={text}
                                 onChangeText={handleChange}
                             />
-                            <Button onPress={() => hideAddMenu(text, true)} title='Add' color='coral'/>
+                            <Button onPress={handleSubmit} title='Add' color='coral'/>
                         </View>
                     </View>
                 </View>

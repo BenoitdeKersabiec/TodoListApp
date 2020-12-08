@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
 export default function TodoItem({ item, pressHandler, is_done, toggleEditMenu, setEditedItem }) {

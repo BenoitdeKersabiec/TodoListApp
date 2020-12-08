@@ -11,9 +11,7 @@ import {
 
 
 export default function EditMenu ({ showEditMenu, toggleEditMenu, editedItem, editHandler }) {
-    console.log(editedItem.text)
-    const [text, setText] = useState(editedItem.text);
-    console.log(text)
+    const [text, setText] = useState('');
 
     const changeHandler = (value) => {
         setText(value);
@@ -35,7 +33,7 @@ export default function EditMenu ({ showEditMenu, toggleEditMenu, editedItem, ed
                         <TextInput 
                             style={styles.input}
                             placeholder="Edit ToDo..."
-                            defaultValue={text}
+                            defaultValue={text === '' ? editedItem.text : text}
                             onChangeText={changeHandler}
                         />
                         <Button onPress={submitEdit} title='Edit ToDo' color='coral'/>
@@ -69,6 +67,7 @@ const styles = StyleSheet.create({
     text: {
         textAlign: 'center',
         paddingBottom: 8,
+        fontWeight: 'bold'
     }
     
 })

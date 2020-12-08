@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    textAlign: 'left',
     color: 'coral',
     fontSize: 35,
     fontWeight: 'bold',

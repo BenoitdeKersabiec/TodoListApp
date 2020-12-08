@@ -1,4 +1,3 @@
-import { DangerZone } from 'expo';
 import React, { useState } from 'react';
 import { StyleSheet, View, Image, Dimensions, Animated, Easing, TouchableOpacity} from 'react-native';
 

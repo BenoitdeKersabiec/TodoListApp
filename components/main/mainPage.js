@@ -17,11 +17,11 @@ import AddButton from './addButton'
 import TodoList from './todoList';
 import EditMenu from '../menus/editMenu'
 import Completed from "./completed";
+import Title from "./title"
 
 
 export default function MainPage() {
 
-  const title = "ToDo List Benoit"
 
   // Setting states
   const [todos, setTodos] = useState([
@@ -30,6 +30,8 @@ export default function MainPage() {
     { text: 'play on the switch', key: '3', is_done: false},
     { text: 'buy milk', key: '0', is_done: true}
   ]);
+
+  const [title, setTitle] = useState("ToDo List Benoit")
 
   const [nextKey, changeNextKey] = useState(Math.max(...todos.map(item => parseInt(item.key))) + 1)
 
@@ -105,7 +107,7 @@ export default function MainPage() {
       <View style={styles.container}>
         <View style={styles.content}>
           <ScrollView style={styles.list}>
-            <Text style={styles.title}>{title}</Text>
+            <Title title={title} setTitle={setTitle}/>
             < TodoList 
               todos={todos.filter(todo => todo.is_done == false)}
               pressHandlerTodos={pressHandlerTodos}
@@ -127,7 +129,6 @@ export default function MainPage() {
           </ScrollView>
         </View>
         <SB style="auto"/> 
-        {/* <AddTodo submitHandler={submitHandler}/> */}
         <Footer/>
         <AddButton submitHandler={submitHandler}/>
         <EditMenu 
@@ -159,11 +160,5 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
   },
-  title: {
-    color: 'coral',
-    fontSize: 35,
-    fontWeight: 'bold',
-    textAlign: "center"
-  }
 });
 

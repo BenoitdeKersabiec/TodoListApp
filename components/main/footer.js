@@ -11,6 +11,7 @@ export default function Footer() {
 const styles = StyleSheet.create({
     header: {
         height: 60,
-        backgroundColor: 'coral'
+        backgroundColor: 'coral',
+        zIndex: -10
     },
 });

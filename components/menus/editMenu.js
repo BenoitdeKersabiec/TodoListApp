@@ -7,7 +7,8 @@ import {
     TouchableWithoutFeedback, 
     TextInput,
     Text,
-    Image
+    Image,
+    TouchableOpacity
 } from 'react-native';
 
 const trash = require('../../assets/trash.png');
@@ -42,9 +43,9 @@ export default function EditMenu ({ showEditMenu, toggleEditMenu, editedItem, ed
                         <View style={{flexDirection: 'row', paddingLeft: 5, alignItems:'center', paddingBottom: 8}}>
                             <Text style={styles.text}>Edit this item</Text>
                             <View style={{flexDirection: 'row-reverse', flex: 1, paddingLeft: 5}}>
-                                <TouchableWithoutFeedback onPress={submitDelete}>
+                                <TouchableOpacity onPress={submitDelete}>
                                     <Image style={styles.trash} source={trash} resizeMode="contain"/>
-                                </TouchableWithoutFeedback>
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <View style={{flexDirection: 'row'}}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Image, Dimensions, Animated, Easing, TouchableWithoutFeedback} from 'react-native';
+import { StyleSheet, View, Image, Dimensions, Animated, Easing, TouchableOpacity} from 'react-native';
 
 import AddMenu from '../menus/addMenu'
 
@@ -48,19 +48,15 @@ export default function AddButton({ submitHandler }) {
         })
     }
 
-    const handlePress = () => {
-        forwardSpinning();
-    }
-
     return (
         <Animated.View style = {[styles.absolute_container, {transform: [{rotate: rotateData}]}]}>
             <AddMenu showAddMenu={showAddMenu} hideAddMenu={hideAddMenu}/>
-            <TouchableWithoutFeedback onPress={handlePress}>
+            <TouchableOpacity onPress={forwardSpinning}>
                 <View>
                     <Image source={plus} style={styles.addButton} resizeMode="contain"/>
                     <Image source={plusBG} style={styles.addButtonBG} resizeMode="contain"/>
                 </View>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
         </Animated.View>
     )
 }

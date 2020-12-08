@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
-export default function TodoItem({ item, pressHandler, is_done }) {
+export default function TodoItem({ item, pressHandler, is_done, toggleEditMenu, setEditedItem }) {
     const [toggleCheckBox, setToggleCheckBox] = useState(is_done);
 
     const handleCheckBox = (newValue) => {
@@ -10,8 +10,13 @@ export default function TodoItem({ item, pressHandler, is_done }) {
         pressHandler(item.key);
     };
 
+    const handleLongPress = () => {
+        setEditedItem(item);
+        toggleEditMenu(true);
+    }
+
     return (
-        <TouchableOpacity onPress={() => pressHandler(item.key)}>
+        <TouchableOpacity onLongPress={handleLongPress}>
             <View style={styles.container}>
                 <CheckBox
                     value={toggleCheckBox}

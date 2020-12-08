@@ -1,31 +1,28 @@
 import React from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { View } from 'react-native';
 
-import Title from "./title";
 import TodoItem from "./todoItem";
 
-
-export default function TodoList({ todos, dones, pressHandlerTodos, pressHandlerDones }) {
+export default function TodoList({ 
+    todos,
+    pressHandlerTodos,
+    toggleEditMenu,
+    setEditedItem
+}) {
     return (
-        <ScrollView style={styles.list}>
-            <Title title="ToDo" />  
+        <View>
             {todos.map( item => {
                 return (
-                    <TodoItem key={item.key} item={item} pressHandler={pressHandlerTodos} is_done={false}/>
+                    <TodoItem 
+                        key={item.key} 
+                        item={item} 
+                        pressHandler={pressHandlerTodos} 
+                        is_done={item.is_done}
+                        toggleEditMenu={toggleEditMenu}
+                        setEditedItem={setEditedItem}
+                    />
                 );
             })}
-            <Title title="Done" />
-            {dones.map( item => {
-                return (
-                    <TodoItem key={item.key} item={item} pressHandler={pressHandlerDones} is_done={true}/>
-                );
-            })}
-        </ScrollView>
+        </View>
     );
 }
-
-const styles = StyleSheet.create({
-    list: {
-        flex: 1,
-    },
-})

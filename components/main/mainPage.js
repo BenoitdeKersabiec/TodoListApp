@@ -8,43 +8,36 @@ import {
   Keyboard,
   Platform,
   StatusBar,
+  ScrollView,
 } from 'react-native';
 
 import Footer from './footer';
 import AddTodo from './addTodo';
-import TodoList from './todoList'
+import TodoList from './todoList';
+import EditMenu from '../edit_menu/editMenu'
+import Title from "./title";
 
 export default function MainPage() {
+
+  // Setting states
   const [todos, setTodos] = useState([
-    { text: 'buy coffee', key: '1'},
-    { text: 'create an app', key: '2'},
-    { text: 'play on the switch', key: '3'},
+    { text: 'buy coffee', key: '1', is_done: false},
+    { text: 'create an app', key: '2', is_done: false},
+    { text: 'play on the switch', key: '3', is_done: false},
+    { text: 'buy milk', key: '0', is_done: true}
   ]);
 
-  const [dones, setDones] = useState([
-    { text: 'buy milk', key: '0'}
-  ])
+  
+  const [showEditMenu, toggleEditMenu] = useState(false)
+  const [editedItem, setEditedItem] = useState({text: '', key: ''})
 
-  const pressHandlerTodos = (key) => {
-    const item = todos.find(todo => todo.key == key)
+  // Handlers
 
+  const editHandler = (key, text) => {
+    const item = todos.find(todo => todo.key == key);
+    item.text = text;
     setTodos((prevTodos) => {
       return prevTodos.filter(todo => todo.key != key);
-    });
-
-    setDones((prevDones) => {
-      return [
-        item,
-        ...prevDones
-      ]
-    })
-  };
-
-  const pressHandlerDones = (key) => {
-    const item = dones.find(todo => todo.key == key)
-
-    setDones((prevDones) => {
-      return prevDones.filter(done => done.key != key);
     });
 
     setTodos((prevTodos) => {
@@ -52,8 +45,28 @@ export default function MainPage() {
         item,
         ...prevTodos
       ]
-    })
+    });
+
+
+  }
+
+  const pressHandlerTodos = (key) => {
+    const item = todos.find(todo => todo.key == key);
+    item.is_done = !item.is_done;
+
+
+    setTodos((prevTodos) => {
+      return prevTodos.filter(todo => todo.key != key);
+    });
+
+    setTodos((prevTodos) => {
+      return [
+        item,
+        ...prevTodos
+      ]
+    });
   };
+
 
   const submitHandler = (text) => {
 
@@ -77,16 +90,27 @@ export default function MainPage() {
     }}>
       <View style={styles.container}>
         <View style={styles.content}>
-          < TodoList 
-            todos={todos} 
-            dones={dones} 
-            pressHandlerTodos={pressHandlerTodos}
-            pressHandlerDones={pressHandlerDones}
-          />
+          <ScrollView style={styles.list}>
+            <Title title="ToDo" />
+            < TodoList 
+              todos={todos.filter(todo => todo.is_done == false)}
+              pressHandlerTodos={pressHandlerTodos}
+              toggleEditMenu={toggleEditMenu}
+              setEditedItem={setEditedItem}
+            />
+            <Title title="Done" />
+            < TodoList 
+              todos={todos.filter(todo => todo.is_done == true)} 
+              pressHandlerTodos={pressHandlerTodos}
+              toggleEditMenu={toggleEditMenu}
+              setEditedItem={setEditedItem}
+            />
+          </ScrollView>
         </View>
         <SB style="auto"/> 
         <AddTodo submitHandler={submitHandler}/>
         <Footer/>
+        <EditMenu showEditMenu={showEditMenu} toggleEditMenu={toggleEditMenu} editedItem={editedItem} editHandler={editHandler}/>
       </View>
     </TouchableWithoutFeedback>
   );

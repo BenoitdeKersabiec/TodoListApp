@@ -12,7 +12,6 @@ export default function Title ({ title, setTitle }) {
     
     const handleSumbit = () => {
         toggleInput(false);
-        console.log(text)
         setTitle(text);
     }
     
@@ -23,7 +22,7 @@ export default function Title ({ title, setTitle }) {
                 <TextInput 
                     style={[styles.input, styles.title]}
                     placeholder="Insert Title..."
-                    defaultValue={text}
+                    defaultValue={text=='' ? title : text}
                     autoFocus={true}
                     onSubmitEditing={handleSumbit}
                     onChangeText={handleChange}

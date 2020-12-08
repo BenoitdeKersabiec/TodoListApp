@@ -1,5 +1,5 @@
 import { StatusBar as SB } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   StyleSheet,
   View,
@@ -19,20 +19,32 @@ import Completed from "./completed";
 import Title from "./title"
 
 
-export default function MainPage() {
+export default function MainPage({ saveData, todoList }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [todos, setTodos] = useState([]);
+  const [title, setTitle] = useState("");
+  const [nextKey, changeNextKey] = useState(0)
 
+  useEffect(() => {
+    setTodos(todoList.todos);
+    setTitle(todoList.title);
+    const max_key = Math.max(...todoList.todos.map(item => parseInt(item.key))) + 1;
+    if (Number.isNaN(max_key) || max_key == null || max_key == -Infinity){
+      changeNextKey(0);
+    } else {
+      changeNextKey(max_key);
+    }
+    setIsLoaded(true);
+
+  }, [todoList])
+
+  useEffect(() => {
+    if (isLoaded) {
+      handleUpdate();
+    }
+  }, [title, todos])
 
   // Setting states
-  const [todos, setTodos] = useState([
-    { text: 'buy coffee', key: '1', is_done: false},
-    { text: 'create an app', key: '2', is_done: false},
-    { text: 'play on the switch', key: '3', is_done: false},
-    { text: 'buy milk', key: '0', is_done: true}
-  ]);
-
-  const [title, setTitle] = useState("ToDo List Benoit")
-
-  const [nextKey, changeNextKey] = useState(Math.max(...todos.map(item => parseInt(item.key))) + 1)
 
   const [showCompleted, toggleCompleted] = useState(false)
   const [showEditMenu, toggleEditMenu] = useState(false)
@@ -54,7 +66,17 @@ export default function MainPage() {
       ]
     });
 
+    handleUpdate();
+  }
 
+  const handleUpdate = () => {
+    console.log('###### UPDATE ######')
+    const updatedTodoList = {
+      title: title,
+      id: todoList.id,
+      todos: todos
+    }
+    saveData(updatedTodoList)
   }
 
   const pressHandlerTodos = (key) => {
@@ -72,6 +94,8 @@ export default function MainPage() {
         ...prevTodos
       ]
     });
+
+    handleUpdate();
   };
 
 
@@ -85,17 +109,27 @@ export default function MainPage() {
         ]
       });
       changeNextKey(nextKey + 1);
+
     } else {
       Alert.alert("Name too short", "Todos must be over 3 chars long", [
         {title: "OK", onPress: () => console.log('alert closed'), color: 'coral'}
       ])
     }
+
+    handleUpdate();
   };
 
   const deleteItem = (key) => {
     setTodos((prevTodos) => {
       return prevTodos.filter(todo => todo.key != key);
     });
+
+    handleUpdate();
+  }
+
+  const updateTitle = (text) => {
+    setTitle(text);
+
   }
 
 
@@ -106,7 +140,7 @@ export default function MainPage() {
       <View style={styles.container}>
         <View style={styles.content}>
           <ScrollView style={styles.list}>
-            <Title title={title} setTitle={setTitle}/>
+            <Title title={title} setTitle={updateTitle}/>
             < TodoList 
               todos={todos.filter(todo => todo.is_done == false)}
               pressHandlerTodos={pressHandlerTodos}
@@ -128,7 +162,6 @@ export default function MainPage() {
           </ScrollView>
         </View>
         <SB style="auto"/> 
-        <Footer/>
         <AddButton submitHandler={submitHandler}/>
         <EditMenu 
           showEditMenu={showEditMenu} 
@@ -137,6 +170,7 @@ export default function MainPage() {
           editHandler={editHandler}
           deleteItem={deleteItem}
         />
+        <Footer handleUpdate={handleUpdate} />
       </View>
     </TouchableWithoutFeedback>
   );

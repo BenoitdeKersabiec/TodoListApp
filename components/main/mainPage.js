@@ -12,10 +12,11 @@ import {
 } from 'react-native';
 
 import Footer from './footer';
-import AddTodo from './addTodo';
+import AddButton from './addButton'
 import TodoList from './todoList';
-import EditMenu from '../edit_menu/editMenu'
+import EditMenu from '../menus/editMenu'
 import Title from "./title";
+
 
 export default function MainPage() {
 
@@ -73,7 +74,7 @@ export default function MainPage() {
     if (text.length > 3){
       setTodos((prevTodos) => {
         return [
-          {text: text, key: Math.random().toString()},
+          {text: text, key: Math.random().toString(), is_done: false},
           ...prevTodos
         ]
       });
@@ -98,7 +99,7 @@ export default function MainPage() {
               toggleEditMenu={toggleEditMenu}
               setEditedItem={setEditedItem}
             />
-            <Title title="Done" />
+            <Title title="Completed" />
             < TodoList 
               todos={todos.filter(todo => todo.is_done == true)} 
               pressHandlerTodos={pressHandlerTodos}
@@ -108,8 +109,9 @@ export default function MainPage() {
           </ScrollView>
         </View>
         <SB style="auto"/> 
-        <AddTodo submitHandler={submitHandler}/>
+        {/* <AddTodo submitHandler={submitHandler}/> */}
         <Footer/>
+        <AddButton submitHandler={submitHandler}/>
         <EditMenu showEditMenu={showEditMenu} toggleEditMenu={toggleEditMenu} editedItem={editedItem} editHandler={editHandler}/>
       </View>
     </TouchableWithoutFeedback>

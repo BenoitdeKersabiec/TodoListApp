@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Image, Dimensions, Animated, Easing, TouchableWithoutFeedback} from 'react-native';
+import { StyleSheet, View, Image, Dimensions, Animated, Easing, TouchableOpacity} from 'react-native';
 
 import AddMenu from '../menus/addMenu'
 
@@ -48,42 +48,40 @@ export default function AddButton({ submitHandler }) {
         })
     }
 
-    const handlePress = () => {
-        forwardSpinning();
-    }
-
     return (
-        <Animated.View style = {[styles.absolute_container, {transform: [{rotate: rotateData}]}]}>
+        <View style = {styles.absolute_container}>
             <AddMenu showAddMenu={showAddMenu} hideAddMenu={hideAddMenu}/>
-            <TouchableWithoutFeedback onPress={handlePress}>
-                <View>
+            <TouchableOpacity style={styles.touchable} onPress={forwardSpinning}>
+                <Animated.View style={{transform: [{rotate: rotateData}]}}>
                     <Image source={plus} style={styles.addButton} resizeMode="contain"/>
-                    <Image source={plusBG} style={styles.addButtonBG} resizeMode="contain"/>
-                </View>
-            </TouchableWithoutFeedback>
-        </Animated.View>
+                </Animated.View>
+            </TouchableOpacity>
+                <Image source={plusBG} style={styles.addButtonBG} resizeMode="contain"/>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     absolute_container: {
         position: "absolute",
-        height: (IMAGE_SIZE),
-        width: (IMAGE_SIZE),
-        top: (Dimensions.get('window').height) - (IMAGE_SIZE)/2 - 30,
+    },
+    touchable: {
         left: (Dimensions.get('window').width / 2) - (IMAGE_SIZE) / 2,
+        top: (Dimensions.get('window').height) - (IMAGE_SIZE)/2 - 30,
     },
     addButton: {
         height: IMAGE_SIZE,
         width: IMAGE_SIZE,
         tintColor: 'coral',
-        zIndex: 2,
+        zIndex: 1,
     },
     addButtonBG: {
         height: (IMAGE_SIZE + 10),
         width: (IMAGE_SIZE + 10),
+        top: (Dimensions.get('window').height) - (IMAGE_SIZE)/2 - 30,
+        left: (Dimensions.get('window').width / 2) - (IMAGE_SIZE + 10) / 2 +10,
         marginTop: -IMAGE_SIZE-5,
-        marginLeft: -5,
-        zIndex: 1,
+        marginLeft: -10,
+        zIndex: -1,
     },
 });

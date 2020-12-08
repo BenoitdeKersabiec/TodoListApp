@@ -6,11 +6,16 @@ import {
     View, 
     TouchableWithoutFeedback, 
     TextInput,
-    Text
+    Text,
+    Image,
+    TouchableOpacity
 } from 'react-native';
 
+const trash = require('../../assets/trash.png');
+const IMAGE_SIZE = 20
 
-export default function EditMenu ({ showEditMenu, toggleEditMenu, editedItem, editHandler }) {
+
+export default function EditMenu ({ showEditMenu, toggleEditMenu, editedItem, editHandler, deleteItem }) {
     const [text, setText] = useState('');
 
     const handleChange = (value) => {
@@ -24,19 +29,34 @@ export default function EditMenu ({ showEditMenu, toggleEditMenu, editedItem, ed
 
     }
 
+    const submitDelete = () => {
+        console.log("delete")
+        deleteItem(editedItem.key);
+        toggleEditMenu(false);
+    }
+
     return (
-        <Modal transparent={true} visible={showEditMenu}>
+        <Modal transparent={true} visible={showEditMenu} animationType='fade'>
             <TouchableWithoutFeedback onPress={() => toggleEditMenu(false)}>
                 <View style={styles.darkbg}>
                     <View style={styles.popup}>
-                        <Text style={styles.text}>Edit ToDo item</Text>
-                        <TextInput 
-                            style={styles.input}
-                            placeholder="Edit ToDo..."
-                            defaultValue={text === '' ? editedItem.text : text}
-                            onChangeText={handleChange}
-                        />
-                        <Button onPress={submitEdit} title='Edit ToDo' color='coral'/>
+                        <View style={{flexDirection: 'row', paddingLeft: 5, alignItems:'center', paddingBottom: 8}}>
+                            <Text style={styles.text}>Edit this item</Text>
+                            <View style={{flexDirection: 'row-reverse', flex: 1, paddingLeft: 5}}>
+                                <TouchableOpacity onPress={submitDelete}>
+                                    <Image style={styles.trash} source={trash} resizeMode="contain"/>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        <View style={{flexDirection: 'row'}}>
+                            <TextInput 
+                                style={styles.input}
+                                placeholder="Edit ToDo..."
+                                defaultValue={text === '' ? editedItem.text : text}
+                                onChangeText={handleChange}
+                            />
+                            <Button onPress={submitEdit} title='Edit' color='coral'/>
+                        </View>
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -53,21 +73,27 @@ const styles = StyleSheet.create({
     popup: {
         justifyContent: 'center',
         backgroundColor: "#FFFFFF",
+        borderRadius: 10,
         margin: 40,
         padding: 15
         
     },
     input: {
-        marginBottom: 10,
+        // marginBottom: 10,
         paddingHorizontal: 8,
         paddingVertical: 6,
         borderWidth: 1,
         borderColor: "#DDDDDD",
+        flex: 1
     },
     text: {
         textAlign: 'center',
-        paddingBottom: 8,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+    },
+    trash: {
+        height: IMAGE_SIZE,
+        width: IMAGE_SIZE,
+        tintColor: 'red',
     }
     
 })

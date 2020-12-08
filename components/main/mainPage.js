@@ -9,16 +9,19 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  Text
 } from 'react-native';
 
 import Footer from './footer';
 import AddButton from './addButton'
 import TodoList from './todoList';
 import EditMenu from '../menus/editMenu'
-import Title from "./title";
+import Completed from "./completed";
 
 
 export default function MainPage() {
+
+  const title = "ToDo List Benoit"
 
   // Setting states
   const [todos, setTodos] = useState([
@@ -28,7 +31,9 @@ export default function MainPage() {
     { text: 'buy milk', key: '0', is_done: true}
   ]);
 
-  
+  const [nextKey, changeNextKey] = useState(Math.max(...todos.map(item => parseInt(item.key))) + 1)
+
+  const [showCompleted, toggleCompleted] = useState(false)
   const [showEditMenu, toggleEditMenu] = useState(false)
   const [editedItem, setEditedItem] = useState({text: '', key: ''})
 
@@ -74,16 +79,24 @@ export default function MainPage() {
     if (text.length > 3){
       setTodos((prevTodos) => {
         return [
-          {text: text, key: Math.random().toString(), is_done: false},
+          {text: text, key: nextKey, is_done: false},
           ...prevTodos
         ]
       });
+      changeNextKey(nextKey + 1);
     } else {
       Alert.alert("Name too short", "Todos must be over 3 chars long", [
         {title: "OK", onPress: () => console.log('alert closed'), color: 'coral'}
       ])
     }
   };
+
+  const deleteItem = (key) => {
+    setTodos((prevTodos) => {
+      return prevTodos.filter(todo => todo.key != key);
+    });
+  }
+
 
   return (
     <TouchableWithoutFeedback onPress={() => {
@@ -92,27 +105,38 @@ export default function MainPage() {
       <View style={styles.container}>
         <View style={styles.content}>
           <ScrollView style={styles.list}>
-            <Title title="ToDo" />
+            <Text style={styles.title}>{title}</Text>
             < TodoList 
               todos={todos.filter(todo => todo.is_done == false)}
               pressHandlerTodos={pressHandlerTodos}
               toggleEditMenu={toggleEditMenu}
               setEditedItem={setEditedItem}
             />
-            <Title title="Completed" />
+            <Completed 
+              length={todos.filter(todo => todo.is_done == true).length}
+              showCompleted={showCompleted}
+              toggleCompleted={toggleCompleted}
+            />
+            { showCompleted ?
             < TodoList 
               todos={todos.filter(todo => todo.is_done == true)} 
               pressHandlerTodos={pressHandlerTodos}
               toggleEditMenu={toggleEditMenu}
               setEditedItem={setEditedItem}
-            />
+            /> : <View/>}
           </ScrollView>
         </View>
         <SB style="auto"/> 
         {/* <AddTodo submitHandler={submitHandler}/> */}
         <Footer/>
         <AddButton submitHandler={submitHandler}/>
-        <EditMenu showEditMenu={showEditMenu} toggleEditMenu={toggleEditMenu} editedItem={editedItem} editHandler={editHandler}/>
+        <EditMenu 
+          showEditMenu={showEditMenu} 
+          toggleEditMenu={toggleEditMenu} 
+          editedItem={editedItem} 
+          editHandler={editHandler}
+          deleteItem={deleteItem}
+        />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -135,5 +159,11 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
   },
+  title: {
+    color: 'coral',
+    fontSize: 35,
+    fontWeight: 'bold',
+    textAlign: "center"
+  }
 });
 

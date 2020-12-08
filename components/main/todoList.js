@@ -10,7 +10,7 @@ export default function TodoList({
     setEditedItem
 }) {
     return (
-        <View>
+        <View style={{paddingTop: 5, paddingBottom: 10}}>
             {todos.map( item => {
                 return (
                     <TodoItem 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
 export default function TodoItem({ item, pressHandler, is_done, toggleEditMenu, setEditedItem }) {
@@ -10,19 +10,21 @@ export default function TodoItem({ item, pressHandler, is_done, toggleEditMenu, 
         pressHandler(item.key);
     };
 
-    const handleLongPress = () => {
+    const handlePress = () => {
         setEditedItem(item);
         toggleEditMenu(true);
     }
 
     return (
-        <TouchableOpacity onLongPress={handleLongPress}>
+        <TouchableOpacity onPress={handlePress}>
             <View style={styles.container}>
-                <CheckBox
-                    value={toggleCheckBox}
-                    onValueChange={handleCheckBox}
-                />
-                <Text style={is_done? styles.striked_through_item : styles.item}>{item.text}</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <CheckBox
+                        value={toggleCheckBox}
+                        onValueChange={handleCheckBox}
+                    />
+                    <Text style={is_done? styles.striked_through_item : styles.item}>{item.text}</Text>
+                </View>
             </View>
         </TouchableOpacity>
     );
@@ -30,22 +32,25 @@ export default function TodoItem({ item, pressHandler, is_done, toggleEditMenu, 
 
 const styles = StyleSheet.create({
     container: {
-        padding: 16,
+        // padding: 16,
         marginTop: 5,
-        borderColor: '#EEEEEE',
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderRadius: 10,
+        // borderColor: '#EEEEEE',
+        // borderWidth: 1,
+        // borderStyle: 'solid',
+        // borderRadius: 10,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        flex: 1,
     },
     item:{
         paddingLeft: 15,
+        fontSize: 16,
     },
     striked_through_item: {
         paddingLeft: 15,
         color: "#999999",
         textDecorationLine: "line-through",
         textDecorationStyle: "solid",
+        fontSize: 16,
     }
 })

@@ -30,7 +30,7 @@ export default function AddMenu ({showAddMenu, hideAddMenu}) {
                                 defaultValue={text}
                                 onChangeText={handleChange}
                             />
-                            <Button onPress={() => hideAddMenu(text, true)} title='Add' color='coral' justifyContent='center'/>
+                            <Button onPress={() => hideAddMenu(text, true)} title='Add' color='coral'/>
                         </View>
                     </View>
                 </View>

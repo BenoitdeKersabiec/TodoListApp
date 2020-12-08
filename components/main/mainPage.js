@@ -85,6 +85,12 @@ export default function MainPage() {
     }
   };
 
+  const deleteItem = (key) => {
+    setTodos((prevTodos) => {
+      return prevTodos.filter(todo => todo.key != key);
+    });
+  }
+
   return (
     <TouchableWithoutFeedback onPress={() => {
       Keyboard.dismiss()
@@ -112,7 +118,13 @@ export default function MainPage() {
         {/* <AddTodo submitHandler={submitHandler}/> */}
         <Footer/>
         <AddButton submitHandler={submitHandler}/>
-        <EditMenu showEditMenu={showEditMenu} toggleEditMenu={toggleEditMenu} editedItem={editedItem} editHandler={editHandler}/>
+        <EditMenu 
+          showEditMenu={showEditMenu} 
+          toggleEditMenu={toggleEditMenu} 
+          editedItem={editedItem} 
+          editHandler={editHandler}
+          deleteItem={deleteItem}
+        />
       </View>
     </TouchableWithoutFeedback>
   );

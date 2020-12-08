@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
 export default function TodoItem({ item, pressHandler, is_done, toggleEditMenu, setEditedItem }) {
@@ -18,11 +18,13 @@ export default function TodoItem({ item, pressHandler, is_done, toggleEditMenu, 
     return (
         <TouchableOpacity onLongPress={handleLongPress}>
             <View style={styles.container}>
-                <CheckBox
-                    value={toggleCheckBox}
-                    onValueChange={handleCheckBox}
-                />
-                <Text style={is_done? styles.striked_through_item : styles.item}>{item.text}</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <CheckBox
+                        value={toggleCheckBox}
+                        onValueChange={handleCheckBox}
+                    />
+                    <Text style={is_done? styles.striked_through_item : styles.item}>{item.text}</Text>
+                </View>
             </View>
         </TouchableOpacity>
     );
@@ -37,7 +39,8 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         borderRadius: 10,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        flex: 1,
     },
     item:{
         paddingLeft: 15,

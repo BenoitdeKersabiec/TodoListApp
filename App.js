@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native'
 
 import MainPage from './components/main/mainPage';
 
+
 export default function App() {
     
     return (

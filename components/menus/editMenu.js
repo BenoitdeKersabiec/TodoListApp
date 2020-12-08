@@ -13,7 +13,7 @@ import {
 export default function EditMenu ({ showEditMenu, toggleEditMenu, editedItem, editHandler }) {
     const [text, setText] = useState('');
 
-    const changeHandler = (value) => {
+    const handleChange = (value) => {
         setText(value);
     }
 
@@ -34,7 +34,7 @@ export default function EditMenu ({ showEditMenu, toggleEditMenu, editedItem, ed
                             style={styles.input}
                             placeholder="Edit ToDo..."
                             defaultValue={text === '' ? editedItem.text : text}
-                            onChangeText={changeHandler}
+                            onChangeText={handleChange}
                         />
                         <Button onPress={submitEdit} title='Edit ToDo' color='coral'/>
                     </View>

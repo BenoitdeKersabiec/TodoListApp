@@ -8,7 +8,6 @@ export default function App() {
 	const [lists, setLists] = useState([{"id": 0, "title": "", "todos": []}])
 
 	const readData = async () => {
-		console.log("###### READING ######")
 		try {
 			const value = await AsyncStorage.getItem("TodoListAppBSDKlists")
 			const jsonValue = JSON.parse(value)

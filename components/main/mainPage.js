@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { 
   StyleSheet,
   View,
-  Alert, 
   TouchableWithoutFeedback, 
   Keyboard,
   Platform,
@@ -70,7 +69,6 @@ export default function MainPage({ saveData, todoList }) {
   }
 
   const handleUpdate = () => {
-    console.log('###### UPDATE ######')
     const updatedTodoList = {
       title: title,
       id: todoList.id,
@@ -100,31 +98,19 @@ export default function MainPage({ saveData, todoList }) {
 
 
   const submitHandler = (text) => {
-
-    if (text.length > 3){
-      setTodos((prevTodos) => {
-        return [
-          {text: text, key: nextKey, is_done: false},
-          ...prevTodos
-        ]
-      });
-      changeNextKey(nextKey + 1);
-
-    } else {
-      Alert.alert("Name too short", "Todos must be over 3 chars long", [
-        {title: "OK", onPress: () => console.log('alert closed'), color: 'coral'}
-      ])
-    }
-
-    handleUpdate();
+    setTodos((prevTodos) => {
+      return [
+        {text: text, key: nextKey, is_done: false},
+        ...prevTodos
+      ]
+    });
+    changeNextKey(nextKey + 1);
   };
 
   const deleteItem = (key) => {
     setTodos((prevTodos) => {
       return prevTodos.filter(todo => todo.key != key);
     });
-
-    handleUpdate();
   }
 
   const updateTitle = (text) => {

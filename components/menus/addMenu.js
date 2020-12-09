@@ -6,7 +6,8 @@ import {
     View, 
     TouchableWithoutFeedback, 
     TextInput,
-    Text
+    Text,
+    Alert
 } from 'react-native';
 
 
@@ -17,9 +18,16 @@ export default function AddMenu ({showAddMenu, hideAddMenu}) {
         setText(value);
     }
 
+
     const handleSubmit = () => {
-        hideAddMenu(text, true); 
-        setText('');
+        if (text.length > 2) {
+            hideAddMenu(text, true); 
+            setText('');
+        } else {
+            Alert.alert("Name too short", "Todos must be over 2 chars long", [
+              {title: "OK", color: 'coral'}
+            ])
+          }
     }
 
     return (

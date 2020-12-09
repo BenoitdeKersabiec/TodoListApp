@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     StyleSheet,
     Modal, 
@@ -15,6 +15,10 @@ import {
 export default function EditMenu ({ showEditMenu, toggleEditMenu, editedItem, editHandler, deleteItem }) {
     const [text, setText] = useState('');
 
+    useEffect(() => {
+        setText(editedItem.text)
+    }, [showEditMenu])
+
     const handleChange = (value) => {
         setText(value);
     }
@@ -27,7 +31,6 @@ export default function EditMenu ({ showEditMenu, toggleEditMenu, editedItem, ed
     }
 
     const submitDelete = () => {
-        console.log("delete")
         deleteItem(editedItem.key);
         toggleEditMenu(false);
     }
@@ -49,7 +52,7 @@ export default function EditMenu ({ showEditMenu, toggleEditMenu, editedItem, ed
                             <TextInput 
                                 style={styles.input}
                                 placeholder="Edit ToDo..."
-                                defaultValue={text === '' ? editedItem.text : text}
+                                defaultValue={text}
                                 onChangeText={handleChange}
                             />
                             <Button onPress={submitEdit} title='Edit' color='coral'/>

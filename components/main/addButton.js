@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Image, Dimensions, Animated, Easing, TouchableOpacity} from 'react-native';
 
-import AddMenu from '../menus/addMenu'
+import AddMenu from '../menus/addItemMenu'
 
 const plus = require('../../assets/plus.png');
 const plusBG = require('../../assets/plus_background.png');

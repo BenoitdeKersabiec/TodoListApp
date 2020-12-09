@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
     StyleSheet,
-    Modal, 
-    Button, 
+    Modal,
     View, 
     TouchableWithoutFeedback, 
     TextInput,
     Text,
-    Alert
+    Alert,
+    Platform
 } from 'react-native';
+import * as RootNavigation from '../utils/rootNavigation.js';
 
 
-export default function AddMenu ({showAddMenu, hideAddMenu}) {
+export default function CreateMenu ({showCreateMenu, toggleCreateMenu, addList, setCurrentScreen}) {
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        if (showCreateMenu) {
+            Platform.OS === 'ios'
+               ? inputRef.current.focus()
+               : setTimeout(() => inputRef.current.focus(), 40);
+
+        }
+     }, [showCreateMenu]);
+
     const [text, setText] = useState('');
 
     const handleChange = (value) => {
@@ -21,8 +33,10 @@ export default function AddMenu ({showAddMenu, hideAddMenu}) {
 
     const handleSubmit = () => {
         if (text.length > 2) {
-            hideAddMenu(text, true); 
+            addList(text);
             setText('');
+            setTimeout(() => RootNavigation.navigate(text, setCurrentScreen), 5);
+            
         } else {
             Alert.alert("Name too short", "Todos must be over 2 chars long", [
               {title: "OK", color: 'coral'}
@@ -31,19 +45,20 @@ export default function AddMenu ({showAddMenu, hideAddMenu}) {
     }
 
     return (
-        <Modal transparent={true} visible={showAddMenu} animationType='fade'>
-            <TouchableWithoutFeedback onPress={() => hideAddMenu(text, false)}>
+        <Modal transparent={true} visible={showCreateMenu} animationType='fade'>
+            <TouchableWithoutFeedback onPress={() => toggleCreateMenu(false)}>
                 <View style={styles.darkbg}>
                     <View style={styles.popup}>
-                        <Text style={styles.text}>Add ToDo item</Text>
+                        <Text style={styles.text}>Create a new To-Do List</Text>
                         <View style={{flexDirection: 'row'}}>
                             <TextInput 
                                 style={styles.input}
-                                placeholder="Add ToDo..."
+                                placeholder="List Name..."
                                 defaultValue={text}
                                 onChangeText={handleChange}
+                                onSubmitEditing={handleSubmit}
+                                ref={inputRef}
                             />
-                            <Button onPress={handleSubmit} title='Add' color='coral'/>
                         </View>
                     </View>
                 </View>
@@ -56,13 +71,13 @@ const styles = StyleSheet.create({
     darkbg: {
         backgroundColor: "#000000aa",
         flex: 1,
-        justifyContent: 'center'
+        justifyContent: 'flex-end'
     },
     popup: {
         justifyContent: 'center',
         backgroundColor: "#FFFFFF",
-        borderRadius: 10,
-        margin: 40,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
         padding: 15,   
     },
     input: {

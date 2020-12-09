@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
     StyleSheet,
     Modal,
@@ -6,66 +6,54 @@ import {
     TouchableWithoutFeedback, 
     TextInput,
     Text,
-    TouchableOpacity,
+    Alert,
     Platform,
 } from 'react-native';
 
 
-
-export default function EditMenu ({ showEditMenu, toggleEditMenu, editedItem, editHandler, deleteItem }) {
+export default function AddMenu ({showAddMenu, hideAddMenu}) {
     const inputRef = useRef(null);
 
     useEffect(() => {
-        if (showEditMenu) {
+        if (showAddMenu) {
             Platform.OS === 'ios'
                ? inputRef.current.focus()
                : setTimeout(() => inputRef.current.focus(), 40);
 
         }
-     }, [showEditMenu]);
+     }, [showAddMenu]);
 
     const [text, setText] = useState('');
-
-    useEffect(() => {
-        setText(editedItem.text)
-    }, [showEditMenu])
 
     const handleChange = (value) => {
         setText(value);
     }
 
-    const submitEdit = () => {
-        editHandler(editedItem.key, text);
-        setText('');
-        toggleEditMenu(false);
 
-    }
-
-    const submitDelete = () => {
-        deleteItem(editedItem.key);
-        toggleEditMenu(false);
+    const handleSubmit = () => {
+        if (text.length > 2) {
+            hideAddMenu(text, true); 
+            setText('');
+        } else {
+            Alert.alert("Name too short", "Todos must be over 2 chars long", [
+              {title: "OK", color: 'coral'}
+            ])
+          }
     }
 
     return (
-        <Modal transparent={true} visible={showEditMenu} animationType='fade'>
-            <TouchableWithoutFeedback onPress={() => toggleEditMenu(false)}>
+        <Modal transparent={true} visible={showAddMenu} animationType='fade'>
+            <TouchableWithoutFeedback onPress={() => hideAddMenu(text, false)}>
                 <View style={styles.darkbg}>
                     <View style={styles.popup}>
-                        <View style={{flexDirection: 'row', paddingLeft: 5, alignItems:'center', paddingBottom: 8}}>
-                            <Text style={styles.text}>Edit this item</Text>
-                            <View style={{flexDirection: 'row-reverse', flex: 1, paddingLeft: 2}}>
-                                <TouchableOpacity onPress={submitDelete}>
-                                    <Text style={[styles.text, {color: 'red'}]}>Delete</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                        <Text style={styles.text}>Add ToDo item</Text>
                         <View style={{flexDirection: 'row'}}>
                             <TextInput 
                                 style={styles.input}
-                                placeholder="Edit ToDo..."
+                                placeholder="Add ToDo..."
                                 defaultValue={text}
                                 onChangeText={handleChange}
-                                onSubmitEditing={submitEdit}
+                                onSubmitEditing={handleSubmit}
                                 ref={inputRef}
                             />
                         </View>
@@ -87,8 +75,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,
-        padding: 15
-        
+        padding: 15,   
     },
     input: {
         // marginBottom: 10,
@@ -99,7 +86,9 @@ const styles = StyleSheet.create({
         flex: 1
     },
     text: {
-        fontWeight: 'bold',
+        textAlign: 'center',
+        paddingBottom: 8,
+        fontWeight: 'bold'
     }
     
 })

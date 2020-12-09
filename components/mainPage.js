@@ -10,19 +10,24 @@ import {
   ScrollView,
 } from 'react-native';
 
-import Footer from './footer';
-import AddButton from './addButton'
-import TodoList from './todoList';
-import EditMenu from '../menus/editMenu'
-import Completed from "./completed";
-import Title from "./title"
+import Footer from './main/footer';
+import AddButton from './main/addButton'
+import TodoList from './main/todoList';
+import EditMenu from './menus/editMenu'
+import Completed from "./main/completed";
+import Title from "./main/title"
 
 
-export default function MainPage({ saveData, todoList }) {
+export default function MainPage({ saveData, todoList, navigation, deleteList }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState("");
   const [nextKey, changeNextKey] = useState(0)
+
+  // useEffect(() => {
+  //   console.log("Hey")
+  // }, [isOpen])
+
 
   useEffect(() => {
     setTodos(todoList.todos);
@@ -68,12 +73,16 @@ export default function MainPage({ saveData, todoList }) {
     handleUpdate();
   }
 
-  const handleUpdate = () => {
-    const updatedTodoList = {
+  const currentList = () => {
+    return ({
       title: title,
       id: todoList.id,
       todos: todos
-    }
+    })
+  }
+
+  const handleUpdate = () => {
+    const updatedTodoList = currentList()
     saveData(updatedTodoList)
   }
 
@@ -118,7 +127,6 @@ export default function MainPage({ saveData, todoList }) {
 
   }
 
-
   return (
     <TouchableWithoutFeedback onPress={() => {
       Keyboard.dismiss()
@@ -156,7 +164,7 @@ export default function MainPage({ saveData, todoList }) {
           editHandler={editHandler}
           deleteItem={deleteItem}
         />
-        <Footer handleUpdate={handleUpdate} />
+        <Footer navigation={navigation} deleteList={deleteList} todoList={currentList()}/>
       </View>
     </TouchableWithoutFeedback>
   );

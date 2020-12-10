@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
     StyleSheet,
     Modal,
@@ -35,6 +35,7 @@ export default function CreateMenu ({showCreateMenu, toggleCreateMenu, addList, 
         if (text.length > 2) {
             addList(text);
             setText('');
+            toggleCreateMenu(false);
             setTimeout(() => RootNavigation.navigate(text, setCurrentScreen), 5);
             
         } else {

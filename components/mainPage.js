@@ -18,7 +18,7 @@ import Completed from "./main/completed";
 import Title from "./main/title"
 
 
-export default function MainPage({ saveData, todoList, navigation, deleteList }) {
+export default function MainPage({ saveData, todoList, deleteList }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState("");
@@ -164,7 +164,7 @@ export default function MainPage({ saveData, todoList, navigation, deleteList })
           editHandler={editHandler}
           deleteItem={deleteItem}
         />
-        <Footer navigation={navigation} deleteList={deleteList} todoList={currentList()}/>
+        <Footer deleteList={deleteList} todoList={currentList()}/>
       </View>
     </TouchableWithoutFeedback>
   );

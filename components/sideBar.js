@@ -10,14 +10,22 @@ import {
 } from 'react-native'
 import * as RootNavigation from '../utils/rootNavigation.js';
 import CreateMenu from './menus/addListMenu'
+import ListMenu from './menus/listMenu'
 
-const listButton = (list, sideBarCurrent, setCurrentScreen) => {
+const listButton = (list, sideBarCurrent, setCurrentScreen, setList, toggleListMenu) => {
     const isCurrentScreen = list.title == sideBarCurrent
+
+    const handleLongPress = () => {
+        setList(list);
+        toggleListMenu(true);
+
+    }
 
     return (
         <View key={list.id}>
             <TouchableOpacity 
                 onPress={() => RootNavigation.navigate(list.title, setCurrentScreen)} 
+                onLongPress={handleLongPress}
                 style={isCurrentScreen ? [styles.touchable, styles.current]: styles.touchable}>
                 <Text style={isCurrentScreen ? styles.textList: {}}>{list.title}</Text>
             </TouchableOpacity>
@@ -27,13 +35,16 @@ const listButton = (list, sideBarCurrent, setCurrentScreen) => {
 }
 
 
-const SideBar = ({ getData, addList, setCurrentScreen, currentScreen }) => {
-    const [showCreateMenu, toggleCreateMenu] = useState(false)
+const SideBar = ({ getData, addList, setCurrentScreen, currentScreen, deleteList }) => {
 
     const todoLists = getData()
+    const [openListMenu, toggleListMenu] = useState(false)
+    const [showCreateMenu, toggleCreateMenu] = useState(false)
+    const [list, setList] = useState({})
 
-    const sideBarCurrent = currentScreen !== '' ? currentScreen : todoLists[0].title
-
+    const sideBarCurrent = currentScreen !== '' ? currentScreen : (todoLists.length > 0
+                                                                   ? todoLists[0].title
+                                                                   : '')
 
     return(
         <View style={styles.drawerContainer}>
@@ -42,18 +53,19 @@ const SideBar = ({ getData, addList, setCurrentScreen, currentScreen }) => {
                 toggleCreateMenu={toggleCreateMenu} 
                 addList={addList} 
                 setCurrentScreen={setCurrentScreen}/>
+            <ListMenu openMenu={openListMenu} setOpenMenu={toggleListMenu} deleteList={deleteList} todoList={list}/>
             <View style={styles.drawerContainer}>
                 <View style={styles.drawerHeader}>
-                    <Text style={styles.text}>Your TodoLists</Text>
+                    <Text style={styles.text}>To-Do Lists</Text>
                 </View>
                 <ScrollView style={{flex: 1, paddingVertical: 5}}>
-                    {todoLists.map(list => listButton(list, sideBarCurrent, setCurrentScreen))}
+                    {todoLists.map(list => listButton(list, sideBarCurrent, setCurrentScreen, setList, toggleListMenu))}
                 </ScrollView>
             </View>
 
             <View style={styles.drawerFooter}>
                 <TouchableOpacity onPress={() => toggleCreateMenu(true)}>
-                    <Text style={styles.text}>Create TodoList</Text>
+                    <Text style={styles.text}>Create a To-Do List</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -69,6 +81,9 @@ const styles = StyleSheet.create({
     drawerHeader: {
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
         paddingBottom: 5,
+        borderBottomColor: "#DDDDDD",
+        borderBottomWidth: 1,
+        marginHorizontal: 10,
     },
     drawerFooter: {
         borderTopWidth: 1,

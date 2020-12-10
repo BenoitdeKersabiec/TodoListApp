@@ -3,11 +3,12 @@ import { SafeAreaView, View, StyleSheet, Platform, StatusBar } from 'react-nativ
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 
 import MainPage from './components/mainPage';
 import SideBar from './components/sideBar'
 import LoadingScreen from './components/loading'
+import Blank from './components/blank'
 import { navigationRef } from './utils/rootNavigation';
 import * as RootNavigation from './utils/rootNavigation';
 
@@ -16,7 +17,6 @@ import * as RootNavigation from './utils/rootNavigation';
 
 const ListPage = (todoList, updateList, deleteList) => {
 	const displayPage = () => {
-		const navigation = useNavigation(); 
 	
 		return (
 			<SafeAreaView style={{flex: 1}}>
@@ -24,7 +24,6 @@ const ListPage = (todoList, updateList, deleteList) => {
 					todoList={todoList}
                     saveData={updateList}
                     deleteList={deleteList}
-                    navigation={navigation}
 				/>
 			</SafeAreaView>
 		);
@@ -38,9 +37,8 @@ const ListPage = (todoList, updateList, deleteList) => {
 const Drawer = createDrawerNavigator();
 
 export default function App() {
-    const [lists, setLists] = useState([{"id": 0, "title": "Your TodoLists", "todos": []}]);
+    const [lists, setLists] = useState([]);
     const loadingList = {id: '-1', title: 'E', todos: []}
-    const emptyList = {id: '0', title: 'To-Do List', todos: []}
     const [Pages, setPages] = useState([ListPage(loadingList, updateList, deleteList)])
     const [currentScreen, setCurrentScreen] = useState('')
 
@@ -75,8 +73,6 @@ export default function App() {
         } else {
             setLists([todoList])
         }
-
-        saveData(lists);
     }
     
     const addList = (title) => {
@@ -101,18 +97,18 @@ export default function App() {
     }
 
     const deleteList = (id) => {
+        RootNavigation.closeDrawer()
         setLists((prevLists) => {
-            return prevLists.filter(list => list.id !== id)
+            const newLists = prevLists.filter(list => list.id !== id)
+            if (newLists.length == 0) {
+                RootNavigation.navigate("Blank", setCurrentScreen)
+            } else {
+                RootNavigation.navigate(newLists[0].title, setCurrentScreen)
+            }
+            return newLists
         });
-        RootNavigation.navigate(lists[0].title, setCurrentScreen)
-        saveData(lists)
+        
     };
-
-    const updatePages = () => {
-        setPages(( lists.length !== 0 ?
-            lists.map(list => ListPage(list, updateList, deleteList)) :
-            [ListPage(emptyList, updateList, deleteList)]))
-    }
 
     const getListTitleandIds = () => {
         return lists.map(list => {return({title: list.title, id: list.id})})
@@ -123,8 +119,16 @@ export default function App() {
     }, [])
 
     useEffect(() => {
-        updatePages()
+        saveData(lists);
+        setPages(lists.map(list => ListPage(list, updateList, deleteList)));
+
     }, [lists])
+
+    useEffect(() => {
+        if (lists.length==0) {
+            RootNavigation.navigate("Blank", setCurrentScreen)
+        }
+    }, [lists.length==0])
     
     
     const CustomDrawerContent = () => {
@@ -135,6 +139,7 @@ export default function App() {
                     addList={addList} 
                     setCurrentScreen={setCurrentScreen}
                     currentScreen={currentScreen}
+                    deleteList={deleteList}
                 />
             </View>
         );
@@ -143,17 +148,17 @@ export default function App() {
     return (
 		<NavigationContainer ref={navigationRef}>
 			<Drawer.Navigator 
-                initialRouteName={Pages[0].title}
+                initialRouteName={"Blank"}
                 edgeWidth={150}
                 drawerContent={props => <CustomDrawerContent {...props} />}
             >
 				{Pages.map(
-                    page => 
-                        page.id !== '-1' ?
-                        <Drawer.Screen name={page.title} component={page.page} key={page.id}/> :
-                        <Drawer.Screen name={page.title} component={LoadingScreen} key={page.id}/>
+                    page =><Drawer.Screen name={page.title} component={page.page} key={page.id}/>
                     
-                ).concat([<Drawer.Screen name={"Loading"} component={LoadingScreen} key={"Loading"}/>])}
+                ).concat([
+                    <Drawer.Screen name={"Loading"} component={LoadingScreen} key={"Loading"}/>,
+                    <Drawer.Screen name={"Blank"} component={Blank} key={"Blank"}/>
+                ])}
 
 			</Drawer.Navigator>
 		</NavigationContainer>
